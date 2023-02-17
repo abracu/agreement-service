@@ -52,4 +52,38 @@ contract AgreementService {
         );
         _;
     }
+
+    function abonarValor() external payable soloParteDos {
+        require(
+            msg.value == valorEnWei,
+            "Debe abonar el valor total del proyecto"
+        );
+        emit PagoRealizado();
+    }
+
+    function entregaDeServicio() external soloParteUno {
+        parteUnoEntrego = true;
+        emit ServicioEntregado();
+    }
+
+    function aprobarServicio() external soloParteDos {
+        require(parteUnoEntrego, "La parte uno no ha entregado el servicio");
+        parteDosAprobo = true;
+        payable(parteUno).transfer(valorEnWei);
+        emit ServicioAprobado();
+    }
+
+    function establecerMulta() external soloParteUno {
+        require(!parteDosAprobo, "El servicio ya ha sido aprobado");
+        terminado = true;
+        payable(msg.sender).transfer(multaEnWei);
+    }
+
+    function retirarSaldo() external soloParteUno {
+        require(
+            parteDosAprobo && terminado,
+            "El servicio aun no ha sido aprobado o no se ha establecido la multa"
+        );
+        payable(msg.sender).transfer(address(this).balance);
+    }
 }
