@@ -69,6 +69,7 @@ contract AgreementService {
     function aprobarServicio() external soloParteDos {
         require(parteUnoEntrego, "La parte uno no ha entregado el servicio");
         parteDosAprobo = true;
+        terminado = true;
         payable(parteUno).transfer(valorEnWei);
         emit ServicioAprobado();
     }
