@@ -5,24 +5,28 @@ contract AgreementService {
     address public parteUno;
     address public parteDos;
     string public descripcion;
-    uint public duracionEnDias;
-    uint public valorEnWei;
-    uint public multaEnWei;
+    uint256 public duracionEnDias;
+    uint256 public valorEnWei;
+    uint256 public multaEnWei;
     bool public parteUnoEntrego;
     bool public parteDosAprobo;
     bool public terminado;
 
-    event AcuerdoCreado(address indexed _parteUno, address indexed _parteDos, uint _valorEnEther);
+    event AcuerdoCreado(
+        address indexed _parteUno,
+        address indexed _parteDos,
+        uint256 _valorEnEther
+    );
     event PagoRealizado();
     event ServicioEntregado();
     event ServicioAprobado();
-    
+
     constructor(
         address _parteUno,
         address _parteDos,
         string memory _descripcion,
-        uint _duracionEnDias,
-        uint _valorEnEther
+        uint256 _duracionEnDias,
+        uint256 _valorEnEther
     ) {
         parteUno = _parteUno;
         parteDos = _parteDos;
@@ -33,4 +37,19 @@ contract AgreementService {
         emit AcuerdoCreado(parteUno, parteDos, _valorEnEther);
     }
 
+    modifier soloParteUno() {
+        require(
+            msg.sender == parteUno,
+            "Solo la parte uno puede realizar esta accion"
+        );
+        _;
+    }
+
+    modifier soloParteDos() {
+        require(
+            msg.sender == parteDos,
+            "Solo la parte dos puede realizar esta accion"
+        );
+        _;
+    }
 }
