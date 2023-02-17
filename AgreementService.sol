@@ -35,6 +35,7 @@ contract AgreementService {
         valorEnWei = _valorEnEther * 1 ether;
         multaEnWei = valorEnWei / 10;
         emit AcuerdoCreado(parteUno, parteDos, _valorEnEther);
+        require(parteUno != parteDos); // este requisito es para prevenir poner dos veces la misma direccion volviendo el contrato inutilizable.
     }
 
     modifier soloParteUno() {
