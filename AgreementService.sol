@@ -22,13 +22,12 @@ contract AgreementService {
     event ServicioAprobado();
 
     constructor(
-        address _parteUno,
         address _parteDos,
         string memory _descripcion,
         uint256 _duracionEnDias,
         uint256 _valorEnEther
     ) {
-        parteUno = _parteUno;
+        parteUno = msg.sender; // la parte uno es la que crea el contrato
         parteDos = _parteDos;
         descripcion = _descripcion;
         duracionEnDias = _duracionEnDias;
